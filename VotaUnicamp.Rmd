@@ -1,0 +1,43 @@
+---
+title: "Vota Unicamp"
+author: "Gabriel Carvalho Freitas"
+output: html_document
+---
+
+```{r rvest}
+Sys.setlocale(locale="UTF-8")
+#install.packages("rvest")
+library(rvest)
+page = read_html("http://votaunicamp.herokuapp.com/results/")
+tbl = html_table(page)[[2]]
+```
+
+```{r data_clean}
+sims = as.integer(gsub("^(\\d+) .*", "\\1", tbl[[3]]))  #posições que começam com um ou mais dígitos, () prestam atenção nestes digitos .*qualquer coisa que vier zero ou mais vezes.
+abst = as.integer(gsub("^(\\d+) .*", "\\1", tbl[[4]]))
+naos = as.integer(gsub("^(\\d+) .*", "\\1", tbl[[5]]))
+final = data.frame(curso=tbl[[1]], sim=sims, abstencao=abst, nao=naos)
+rownames(final) = final[[1]]
+final[[1]] = NULL
+```
+
+```{r install}
+#install.packages("d3heatmap")
+library(d3heatmap)
+#install.packager("RColorBrewer")
+library(RColorBrewer)
+d3heatmap(final, col=rev(brewer.pal(9,"RdBu")))
+```
+
+```{r mapa}
+#htmlwiget -> leaflet
+#install.packages("leaflet")
+library(leaflet)
+#install.packages("RgoogleMaps")
+library(RgoogleMaps)
+unicamp_loc = getGeoCode("UNICAMP")
+unicamp_loc = c(lat=-22.8181179,lon = -47.070085)
+m = leaflet() %>% addTitles() %>% setView(unicamp_loc['lat'], unicamp_loc['lon'], zoom = 12)
+m
+```
+
