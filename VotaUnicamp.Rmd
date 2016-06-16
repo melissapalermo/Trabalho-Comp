@@ -1,6 +1,5 @@
 ---
 title: "Vota Unicamp"
-author: "Gabriel Carvalho Freitas"
 output: html_document
 ---
 
@@ -24,7 +23,7 @@ final[[1]] = NULL
 ```{r install}
 #install.packages("d3heatmap")
 library(d3heatmap)
-#install.packager("RColorBrewer")
+#install.packages("RColorBrewer")
 library(RColorBrewer)
 d3heatmap(final, col=rev(brewer.pal(9,"RdBu")))
 ```
@@ -37,7 +36,8 @@ library(leaflet)
 library(RgoogleMaps)
 unicamp_loc = getGeoCode("UNICAMP")
 unicamp_loc = c(lat=-22.8181179,lon = -47.070085)
-m = leaflet() %>% addTitles() %>% setView(unicamp_loc['lat'], unicamp_loc['lon'], zoom = 12)
+m = leaflet() %>% addTiles() %>% setView(unicamp_loc['lat'], unicamp_loc['lon'], zoom = 16)
 m
 ```
+
 
